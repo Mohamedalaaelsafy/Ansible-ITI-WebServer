@@ -1,0 +1,40 @@
+---
+- hosts: WebServers
+  become: true
+  vars_files:
+  - ./vars/global.yaml
+  tasks:
+
+  - name: Install {{ software }} (RedHat/Amazon-Linux)
+    yum:
+      name: {{ software }}
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["RedHat","Amazon"]
+
+  - name: Custom Index Page (RedHat/Amazon-Linux)
+    ansible.builtin.template:
+      src: templates/index.html
+      dest: /usr/share/nginx/html/index.html
+    when: ansible_distribution in ["RedHat","Amazon"]
+  - name: Start {{ software }} Service
+    service:
+      name: nginx
+      state: started
+    when: ansible_distribution in ["RedHat","Amazon"]
+
+  - name: Install {{ software }} on (Ubuntu)
+    apt:
+      name: 
+        - {{ software }}
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["Ubuntu"]
+
+  - name: Custom Index Page (Ubuntu)
+    ansible.builtin.template:
+      src: templates/index.html
+      dest: /var/www/html/index.nginx-debian.html
+    when: ansible_distribution in ["Ubuntu"]
+
+

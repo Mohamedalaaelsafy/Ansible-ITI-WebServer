@@ -1,0 +1,40 @@
+---
+- hosts: web_servers
+  become: true
+  vars_files:
+  - ./vars/global.yaml
+  tasks:
+
+  - name: Install nginx (RedHat/Amazon-Linux)
+    yum:
+      name: nginx
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["RedHat","Amazon"]
+
+  - name: Custom Index Page (RedHat/Amazon-Linux)
+    ansible.builtin.template:
+      src: ./app/index.html
+      dest: /usr/share/nginx/html/index.html
+    when: ansible_distribution in ["RedHat","Amazon"]
+  - name: Start NGiNX
+    service:
+      name: nginx
+      state: started
+    when: ansible_distribution in ["RedHat","Amazon"]
+
+  - name: Install Nginx on (Ubuntu)
+    apt:
+      name: 
+        - nginx
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["Ubuntu"]
+
+  - name: Custom Index Page (Ubuntu)
+    copy:
+      dest: /var/www/html/index.nginx-debian.html
+      content: "Welcome {{ my_name }}"
+    when: ansible_distribution in ["Ubuntu"]
+
+

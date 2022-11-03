@@ -1,0 +1,55 @@
+---
+- hosts: web_servers
+  become: true
+  vars_files:
+  - ../vars/global.yaml
+  tasks:
+
+  - name: Install Updates on (RedHat)
+    become_user: ec2-user
+    tags: always
+    dnf:
+      update_cache: yes
+    when: ansible_distribution in ["RedHat"]
+
+  - name: Install Updates (Ubuntu)
+    become_user: ubuntu
+    tags: always
+    apt:
+      update_cache: yes
+    when: ansible_distribution in ["Ubuntu"]
+
+
+
+  - name: Install nginx RedHat
+    yum:
+      name: nginx
+      state: latest
+    when: ansible_distribution in ["RedHat"]
+
+  - name: Custom Index Page (RedHat)
+    copy:
+      content: "Welcome Mohamed Alaa"
+      dest: /usr/share/nginx/html/index.html
+    when: ansible_distribution in ["RedHat"]
+  - name: Start NGiNX
+    service:
+      name: nginx
+      state: started
+    when: ansible_distribution in ["RedHat"]
+
+  - name: Install Nginx on (Ubuntu)
+    apt:
+      name: 
+        - nginx
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["Ubuntu"]
+
+  - name: Custom Index Page (Ubuntu)
+    copy:
+      dest: /var/www/html/index.nginx-debian.html
+      content: "Welcome Mohamed Alaa"
+    when: ansible_distribution in ["Ubuntu"]
+
+

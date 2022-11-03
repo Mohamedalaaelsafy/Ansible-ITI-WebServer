@@ -1,0 +1,58 @@
+---
+- hosts: web_servers
+  become: true
+  pre_tasks:
+
+  - name: Install Updates on (RedHat)
+    become_user: ec2-user
+    tags: always
+    dnf:
+      update_cache: yes
+    when: ansible_distribution in ["RedHat"]
+
+  - name: Install Updates (Ubuntu)
+    become_user: ubuntu
+    tags: always
+    apt:
+      update_cache: yes
+    when: ansible_distribution in ["Ubuntu"]
+
+
+
+
+  - name: Install Nginx on (RedHat)
+    become_user: ec2-user
+    dnf:
+      name: 
+        - nginx
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["RedHat"]
+
+  - name: Custom Index Page
+    become_user: ec2-user
+    copy:
+      dest: /var/www/html/index.nginx-debian.html
+      content: "Welcome Mohamed Alaa"
+    when: ansible_distribution in ["RedHat"]
+
+
+
+
+  - name: Install Nginx on (Ubuntu)
+    become_user: ubuntu
+    apt:
+      name: 
+        - nginx
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["Ubuntu"]
+
+  - name: Custom Index Page
+    become_user: ubuntu
+    copy:
+      dest: /var/www/html/index.nginx-debian.html
+      content: "Welcome Mohamed Alaa"
+    when: ansible_distribution in ["Ubuntu"]
+
+ 

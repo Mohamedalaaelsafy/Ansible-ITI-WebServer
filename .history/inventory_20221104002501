@@ -1,0 +1,9 @@
+[WebServers]
+ec2-user@34.238.155.110
+ubuntu@52.204.12.45
+ec2-user@35.170.187.93
+
+
+node01 ansible_host=203.0.113.111 ansible_user=sammy
+node02 ansible_host=203.0.113.112 ansible_user=sammy
+node03 ansible_host=203.0.113.113 ansible_user=myuser

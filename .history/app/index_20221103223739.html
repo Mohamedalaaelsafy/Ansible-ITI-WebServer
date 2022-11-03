@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<center>
+<body style="background-color:powderblue;">
+<h1>Welcome {{ my_name }} From ITI WebServer.</h1>
+<h1>Private IP DNS</h1>
+<p>{{ansible_hostname}}</p>
+<h1>Private IP</h1>
+<p>{{ ansible_eth0.ipv4.address }}</p>
+        
+</center>
+</body>
+</html>
