@@ -33,11 +33,12 @@
     <div class="cotnainer">
         <div>
             <h3>IP DNS HostName</h3>
-            <p>{{ansible_hostname}}</p>
+            <p>{{ansible_nodename}}</p>
         </div>
         <div>
             <h3>Private IP</h3>
             <p>{{ ansible_eth0.ipv4.address }}</p>
+            <!-- <p>{{ ansible_nodename }}</p> -->
         </div>
     </div>
 </body>
